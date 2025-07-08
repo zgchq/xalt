@@ -1,333 +1,178 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>贪吃蛇小游戏</title>
-  </head>
-  <style>
-	body{	
-	  margin:0px;
-	  padding:0px;
-	  background-color: rgb(117, 99, 73);
-	  text-align: center;
-	}
-	#main{
-		margin:100px;
-		 
-	}
-	.btn{
-		width:100px;
-		height:40px;
-		
-	}
-	.gtitle{
-		font-size:25px;
-		font-weight:bold;
-	}
-	#gnum{
-		color:red;
-	}
-  </style>
-  <body>
-	 
-    <div id="main" align="center">
-	   <h1>贪吃蛇--小游戏</h1>
-       <input class="btn" type="button" value="开始游戏" id="begin" />
-	   <input class="btn" type="button" value="暂停游戏" id="pause" />
-	   <span class="gtitle">第<span id="gnum">1</span>关</span>
-	   <script>
-	   var main = document.getElementById('main');
-	   var showcanvas = true; //是否开启画布的格子 true  false
-			/*
-			地图对象的构造方法
-			原子大小宽和高是一样的   atom
-			横向原子的数量         xnum
-			纵向原子的数量		     ynum
-			*/
-			function Map(atom, xnum, ynum){
-				this.atom = atom;
-				this.xnum = xnum;
-				this.ynum = ynum;
-				
-				this.canvas = null;
-				
-				//创建画布的方法
-				this.create = function(){
-					this.canvas	=document.createElement('div');
-					this.canvas.style.cssText="position:relative;top:40px;border:1px solid darkred; background:#FAFAFA";
-					this.canvas.style.width = this.atom * xnum + 'px';  //画布的宽
-					this.canvas.style.height = this.atom * ynum + 'px';  //画布的高
-					main.appendChild(this.canvas);
-					
-					if(showcanvas){
-					  for(var y = 0; y < ynum; y ++){
-					   for(var x = 0; x < xnum; x ++){
-						var a = document.createElement('div');
-						a.style.cssText="border:1px solid yellow";
-						a.style.width = this.atom + 'px';
-						a.style.height = this.atom + 'px';
-						a.style.backgroundColor = "green";
-						this.canvas.appendChild(a);
-						a.style.position = 'absolute';
-						a.style.left = x * this.atom + 'px';
-						a.style.top = y * this.atom + 'px';
-						}
-					  }
-				   }
-				}
-			}
-			
-			/*
-				创造食物的构造方法
-				mop  
-			*/
-			function Food(map){
-				this.width = map.atom;
-				this.height = map.atom;
-				this.bgcolor = "rgb("+Math.floor(Math.random()*200)+","+Math.floor(Math.random()*200)+","+Math.floor(Math.random()*200)+")";
-				
-				this.x = Math.floor(Math.random()*map.xnum);
-				this.y = Math.floor(Math.random()*map.ynum);
-				
-				this.flag = document.createElement('div');
-				this.flag.style.width = this.width + 'px';
-				this.flag.style.height = this.height + 'px';
-				
-				this.flag.style.backgroundColor = this.bgcolor;
-				this.flag.style.borderRadius = '50%'; //圆形原子
-				this.flag.style.position = 'absolute';
-				this.flag.style.left = this.x * this.width + 'px';
-				this.flag.style.top = this.y * this.height + 'px';
-				
-				map.canvas.appendChild(this.flag);
-			}
-			
-			function Snake(map){
-				this.width = map.atom; //设置蛇的宽
-				this.height = map.atom; //设置蛇的高
-				this.direction = 'right'; //默认走的方向
-				
-				this.body = [
-					{x:2,y:0}, //蛇头
-					{x:1,y:0}, //蛇身体
-					{x:0,y:0}  //蛇尾
-				];
-				//显示蛇
-				this.display = function(){
-					for(var i=0; i<this.body.length; i++){
-						if(this.body[i].x != null){
-							var s = document.createElement('div');
-							
-							this.body[i].flag = s;
-							
-							s.style.width = this.width + 'px';
-							s.style.height = this.height + 'px';
-							s.style.backgroundColor = "rgb("+Math.floor(Math.random()*200)+","+Math.floor(Math.random()*200)+","+Math.floor(Math.random()*200)+")";
-							s.style.bordeRadius = '50%';
-							
-							s.style.position = 'absolute';
-							s.style.left = this.body[i].x * this.width + 'px';
-							s.style.top = this.body[i].y * this.height + 'px';
-							
-							map.canvas.appendChild(s);
-						}
-					}
-				}
-				//让蛇运动起来
-				this.run = function(){
-				 
-				for(var i=this.body.length-1; i>0; i--){
-					this.body[i].x = this.body[i-1].x;
-					this.body[i].y = this.body[i-1].y;
-				}
-				
-				//
-				switch(this.direction){
-					case "left": this.body[0].x -= 1; break;
-					case "right": this.body[0].x += 1; break;
-					case "up": this.body[0].y -= 1; break;
-					case "down": this.body[0].y += 1; break;
-				}
-				
-				 
-				
-					//this.body[0].y += 1;
-				/*
-					{x:2,y:0}, //蛇头
-					{x:1,y:0}, //蛇身体
-					{x:0,y:0}  //蛇尾
-				*/	
-				
-				//蛇在运行的时候，吃掉食物
-				if(this.body[0].x == food.x && this.body[0].y == food.y){
-				
-					this.body.push({x:null,y:null,flag:null});
-					
-					if(this.body.length > l.slength){
-						l.set();
-					}
-					
-					map.canvas.removeChild(food.flag);
-					food = new Food(map);
-					
-				}
-				
-				//是否碰到边界，
-				if(this.body[0].x < 0 || this.body[0].x > map.xnum-1 || this.body[0].y < 0 || this.body[0].y > map.ynum-1){
-					clearInterval(timer); //清除定时器
-					
-					alert("游戏结束！");
-					
-					//重新开始游戏
-					restart(map,this);
-					return false;
-				
-				}
-				
-				//是否和自己碰撞
-				for(var i=4; i<this.body.length; i++){
-					if(this.body[0].x == this.body[i].x && this.body[0].y == this.body[i].y){
-						
-					clearInterval(timer); //清除定时器
-					
-					alert("游戏结束！");
-					
-					//重新开始游戏
-					restart(map,this);
-					return false;
-					
-					}
-				
-				}
-				
-				for(var i=0; i<this.body.length; i++){
-					if(this.body[i].flag != null){
-					  map.canvas.removeChild(this.body[i].flag)
-					
-					}
-					
-				}
-				
-					this.display();
-				}
-				
-				//重新开始游戏，构造方法
-				function restart(map,snake){
-					for(var i=0; i<snake.body.length; i++){
-					
-						map.canvas.removeChild(snake.body[i].flog);
-					}
-					
-					this.body = [
-					{x:2,y:0}, //蛇头
-					{x:1,y:0}, //蛇身体
-					{x:0,y:0}  //蛇尾
-				    ];
-					
-					snake.direction = 'right';
-					snake.display();
-					
-					map.canvas.removeChild(food.flag);
-					food = new Food(map);
-				}
-			}
-			
-			//设置级别对象
-			function level(){
-				this.num = 1;  //级别关数
-				this.speek = 300;  //单位毫秒
-				this.slength = 8;  //每一关蛇的长度判断
-				
-				this.set = function(){
-				
-					this.num++;
-					if(this.speek <= 50){
-						this.speek = 50;
-					}else{
-						this.speek -= 50;
-					}
-					this.slength += 3;
-					
-					this.display();
-					start();
-				}
-				
-				
-				this.display = function(){
-					document.getElementById('gnum').innerHTML = this.num;
-				}
-				
-			}	
-				
-			var l = new level();
-			l.display();
-				
-				
-				
-			
-						 
-			
-			
-			
-			//创建地图对象
-			var map = new Map(20, 40, 20);
-			
-			map.create();  //显示画布
-			
-			var food = new Food(map);  //构造食物对象
-			
-			var snake = new Snake(map);
-			snake.display();
-			
-			window.onkeydown = function(e){
-				var event = e || window.event;
-				
-				//console.log(event.keyCode);
-				
-				switch(event.keyCode){
-					case 38:
-					  if(snake.direction != "down"){
-						snake.direction = "up";
-					    }
-						break;
-						
-					case 40:						
-					 if(snake.direction != "up"){
-						snake.direction = "down";
-					    }
-						break;
-					case 37:
-					 if(snake.direction != "right"){
-						snake.direction = "left";
-					    }
-						break;
-					case 39:
-					 if(snake.direction != "left"){
-						snake.direction = "right";
-					    }
-						break;
-				}
-				
-			}
-			
-			var timer; //变量可以提升
-			
-			function start(){
-				clearInterval(timer);
-				timer = setInterval(function(){
-					snake.run();
-				},l.speek);
-			
-			}
-			
-			document.getElementById('begin').onclick=function(){
-				start();
-			}
-			document.getElementById('pause').onclick=function(){
-				clearInterval(timer);
-			}
-	   </script> 	    
-    </div>                                                             
-  </body>
-</html>	 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贪吃蛇游戏</title>
+    <style>
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: #eee;
+        }
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>贪吃蛇游戏</h1>
+    <button onclick="startGame()">开始游戏</button>
+    <button onclick="pauseGame()">暂停游戏</button>
+    <button onclick="resumeGame()">继续游戏</button>
+    <br><br>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const snakeBlock = 10;
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+        let snake = [{ x: 200, y: 200 }];
+        let dx = snakeBlock;
+        let dy = 0;
+        let food = { x: 0, y: 0 };
+        let score = 0;
+        let gameRunning = false;
+
+        function randomFood(min, max) {
+            return Math.round((Math.random() * (max - min) + min) / snakeBlock) * snakeBlock;
+        }
+
+        function createFood() {
+            food.x = randomFood(0, canvasWidth - snakeBlock);
+            food.y = randomFood(0, canvasHeight - snakeBlock);
+
+            snake.forEach(part => {
+                if (part.x === food.x && part.y === food.y) {
+                    createFood();
+                }
+            });
+        }
+
+        function drawSnake() {
+            snake.forEach(drawSnakePart);
+        }
+
+        function drawSnakePart(part) {
+            ctx.fillStyle = 'black';
+            ctx.strokeStyle = 'darkgreen';
+
+            ctx.fillRect(part.x, part.y, snakeBlock, snakeBlock);
+            ctx.strokeRect(part.x, part.y, snakeBlock, snakeBlock);
+        }
+
+        function drawFood() {
+            ctx.fillStyle = 'red';
+            ctx.strokeStyle = 'darkred';
+
+            ctx.fillRect(food.x, food.y, snakeBlock, snakeBlock);
+            ctx.strokeRect(food.x, food.y, snakeBlock, snakeBlock);
+        }
+
+        function moveSnake() {
+            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+            snake.unshift(head);
+
+            const didEatFood = snake[0].x === food.x && snake[0].y === food.y;
+            if (didEatFood) {
+                score += 10;
+                createFood();
+            } else {
+                snake.pop();
+            }
+        }
+
+        function changeDirection(event) {
+            const touchX = event.touches[0].clientX;
+            const touchY = event.touches[0].clientY;
+            const canvasRect = canvas.getBoundingClientRect();
+
+            if (touchX < canvasRect.left + canvasWidth / 2) {
+                dx = -snakeBlock;
+                dy = 0;
+            } else if (touchX > canvasRect.left + canvasWidth / 2) {
+                dx = snakeBlock;
+                dy = 0;
+            } else if (touchY < canvasRect.top + canvasHeight / 2) {
+                dx = 0;
+                dy = -snakeBlock;
+            } else if (touchY > canvasRect.top + canvasHeight / 2) {
+                dx = 0;
+                dy = snakeBlock;
+            }
+        }
+
+        function checkCollision() {
+            for (let i = 4; i < snake.length; i++) {
+                if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+                    return true;
+                }
+            }
+
+            const hitLeftWall = snake[0].x < 0;
+            const hitRightWall = snake[0].x > canvasWidth - snakeBlock;
+            const hitToptWall = snake[0].y < 0;
+            const hitBottomWall = snake[0].y > canvasHeight - snakeBlock;
+
+            return hitLeftWall || hitRightWall || hitToptWall || hitBottomWall;
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = 'white';
+            ctx.strokeStyle = 'black';
+
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+            ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+
+            clearCanvas();
+            drawFood();
+            moveSnake();
+            drawSnake();
+
+            if (checkCollision()) {
+                gameRunning = false;
+                ctx.font = '48px serif';
+                ctx.fillStyle = 'red';
+                ctx.fillText('游戏结束', canvasWidth / 2 - 100, canvasHeight / 2);
+            }
+
+            setTimeout(gameLoop, 100);
+        }
+
+        function startGame() {
+            gameRunning = true;
+            score = 0;
+            snake = [{ x: 200, y: 200 }];
+            dx = snakeBlock;
+            dy = 0;
+            createFood();
+            gameLoop();
+        }
+
+        function pauseGame() {
+            gameRunning = false;
+        }
+
+        function resumeGame() {
+            gameRunning = true;
+            gameLoop();
+        }
+
+        document.addEventListener('touchstart', changeDirection);
+    </script>
+</body>
+</html>
