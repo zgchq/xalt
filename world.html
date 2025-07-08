@@ -1,5 +1,5 @@
  <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,9 +24,9 @@
 </head>
 <body>
     <h1>贪吃蛇游戏</h1>
-    <button onclick="startGame()">开始游戏</button>
-    <button onclick="pauseGame()">暂停游戏</button>
-    <button onclick="resumeGame()">继续游戏</button>
+    <button id="startButton">开始游戏</button>
+    <button id="pauseButton">暂停游戏</button>
+    <button id="resumeButton">继续游戏</button>
     <br><br>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
 
@@ -93,6 +93,7 @@
         }
 
         function changeDirection(event) {
+            event.preventDefault(); // 防止默认的触摸行为
             const touchX = event.touches[0].clientX;
             const touchY = event.touches[0].clientY;
             const canvasRect = canvas.getBoundingClientRect();
@@ -121,10 +122,10 @@
 
             const hitLeftWall = snake[0].x < 0;
             const hitRightWall = snake[0].x > canvasWidth - snakeBlock;
-            const hitToptWall = snake[0].y < 0;
+            const hitTopWall = snake[0].y < 0;
             const hitBottomWall = snake[0].y > canvasHeight - snakeBlock;
 
-            return hitLeftWall || hitRightWall || hitToptWall || hitBottomWall;
+            return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall;
         }
 
         function clearCanvas() {
@@ -172,7 +173,32 @@
             gameLoop();
         }
 
-        document.addEventListener('touchstart', changeDirection);
+        document.addEventListener('touchstart', function(event) {
+            const touchX = event.touches[0].clientX;
+            const touchY = event.touches[0].clientY;
+
+            const startButtonRect = document.getElementById('startButton').getBoundingClientRect();
+            const pauseButtonRect = document.getElementById('pauseButton').getBoundingClientRect();
+            const resumeButtonRect = document.getElementById('resumeButton').getBoundingClientRect();
+
+            if (touchX > startButtonRect.left && touchX < startButtonRect.right &&
+                touchY > startButtonRect.top && touchY < startButtonRect.bottom) {
+                startGame();
+            } else if (touchX > pauseButtonRect.left && touchX < pauseButtonRect.right &&
+                       touchY > pauseButtonRect.top && touchY < pauseButtonRect.bottom) {
+                pauseGame();
+            } else if (touchX > resumeButtonRect.left && touchX < resumeButtonRect.right &&
+                       touchY > resumeButtonRect.top && touchY < resumeButtonRect.bottom) {
+                resumeGame();
+            } else {
+                changeDirection(event);
+            }
+        });
+
+        // 添加点击事件监听器以兼容桌面设备
+        document.getElementById('startButton').addEventListener('click', startGame);
+        document.getElementById('pauseButton').addEventListener('click', pauseGame);
+        document.getElementById('resumeButton').addEventListener('click', resumeGame);
     </script>
 </body>
 </html>
