@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -8,24 +8,24 @@
         canvas {
             display: block;
             margin: 0 auto;
-            background-color: #eee;
+            background-color: #eee; /* 设置画布背景颜色为浅灰色 */
         }
         body {
             text-align: center;
-            font-family: Arial, sans-serif;
+            font-family: Arial, sans-serif; /* 设置页面字体为Arial */
         }
         button {
             margin: 5px;
             padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
+            font-size: 16px; /* 设置按钮字体大小为16px */
+            cursor: pointer; /* 设置鼠标悬停时的光标样式为指针 */
             background-color: red; /* 设置按钮的背景颜色为红色 */
             color: white; /* 设置按钮的文字颜色为白色 */
             border: none; /* 去掉按钮的边框 */
             border-radius: 5px; /* 添加圆角 */
         }
         button:hover {
-            background-color: darkred; /* 设置按钮悬停时的颜色 */
+            background-color: darkred; /* 设置按钮悬停时的背景颜色为深红色 */
         }
     </style>
 </head>
@@ -74,16 +74,16 @@
             ctx.fillStyle = 'black';
             ctx.strokeStyle = 'darkgreen';
 
-            ctx.fillRect(part.x, part.y, snakeBlock, snakeBlock);
-            ctx.strokeRect(part.x, part.y, snakeBlock, snakeBlock);
+            ctx.fillRect(part.x, part.y, snakeBlock, snakeBlock); // 绘制蛇块的填充颜色
+            ctx.strokeRect(part.x, part.y, snakeBlock, snakeBlock); // 绘制蛇块的边框颜色
         }
 
         function drawFood() {
             ctx.fillStyle = 'red';
             ctx.strokeStyle = 'darkred';
 
-            ctx.fillRect(food.x, food.y, snakeBlock, snakeBlock);
-            ctx.strokeRect(food.x, food.y, snakeBlock, snakeBlock);
+            ctx.fillRect(food.x, food.y, snakeBlock, snakeBlock); // 绘制食物的填充颜色
+            ctx.strokeRect(food.x, food.y, snakeBlock, snakeBlock); // 绘制食物的边框颜色
         }
 
         function moveSnake() {
@@ -99,22 +99,32 @@
             }
         }
 
+        // 根据触摸事件改变蛇移动方向的函数
         function changeDirection(event) {
             event.preventDefault(); // 防止默认的触摸行为
             const touchX = event.touches[0].clientX;
             const touchY = event.touches[0].clientY;
             const canvasRect = canvas.getBoundingClientRect();
 
-            if (touchX < canvasRect.left + canvasWidth / 2) {
-                dx = -snakeBlock;
-                dy = 0;
-            } else if (touchX > canvasRect.left + canvasWidth / 2) {
-                dx = snakeBlock;
-                dy = 0;
-            } else if (touchY < canvasRect.top + canvasHeight / 2) {
+            // 计算触摸点相对于画布的坐标
+            const x = touchX - canvasRect.left;
+            const y = touchY - canvasRect.top;
+
+            // 根据触摸位置改变蛇的移动方向
+            if (x < canvasWidth / 2 && y < canvasHeight / 2) {
+                // 左上象限：向上
                 dx = 0;
                 dy = -snakeBlock;
-            } else if (touchY > canvasRect.top + canvasHeight / 2) {
+            } else if (x > canvasWidth / 2 && y < canvasHeight / 2) {
+                // 右上象限：向右
+                dx = snakeBlock;
+                dy = 0;
+            } else if (x < canvasWidth / 2 && y > canvasHeight / 2) {
+                // 左下象限：向左
+                dx = -snakeBlock;
+                dy = 0;
+            } else if (x > canvasWidth / 2 && y > canvasHeight / 2) {
+                // 右下象限：向下
                 dx = 0;
                 dy = snakeBlock;
             }
@@ -123,52 +133,53 @@
         function checkCollision() {
             for (let i = 4; i < snake.length; i++) {
                 if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
-                    return true;
+                    return true; // 如果蛇头碰到自身，则碰撞
                 }
             }
 
-            const hitLeftWall = snake[0].x < 0;
-            const hitRightWall = snake[0].x > canvasWidth - snakeBlock;
-            const hitTopWall = snake[0].y < 0;
-            const hitBottomWall = snake[0].y > canvasHeight - snakeBlock;
+            const hitLeftWall = snake[0].x < 0; // 检查是否撞到左墙壁
+            const hitRightWall = snake[0].x > canvasWidth - snakeBlock; // 检查是否撞到右墙壁
+            const hitTopWall = snake[0].y < 0; // 检查是否撞到上墙壁
+            const hitBottomWall = snake[0].y > canvasHeight - snakeBlock; // 检查是否撞到下墙壁
 
-            return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall;
+            return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall; // 如果撞到墙壁，则碰撞
         }
 
         function clearCanvas() {
             ctx.fillStyle = 'white';
             ctx.strokeStyle = 'black';
 
-            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-            ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight); // 填充背景为白色
+            ctx.strokeRect(0, 0, canvasWidth, canvasHeight); // 绘制边框为黑色
         }
 
         function gameLoop() {
-            if (!gameRunning) return;
+            if (!gameRunning) return; // 如果游戏未运行，则直接返回
 
-            clearCanvas();
-            drawFood();
-            moveSnake();
-            drawSnake();
+            clearCanvas(); // 清除画布
+            drawFood(); // 绘制食物
+            moveSnake(); // 移动蛇
+            drawSnake(); // 绘制蛇
 
+            // 检查是否有碰撞发生，如果有则结束游戏
             if (checkCollision()) {
                 gameRunning = false;
                 ctx.font = '48px serif';
                 ctx.fillStyle = 'red';
-                ctx.fillText('游戏结束', canvasWidth / 2 - 100, canvasHeight / 2);
+                ctx.fillText('游戏结束', canvasWidth / 2 - 100, canvasHeight / 2); // 显示游戏结束文字
             }
 
-            setTimeout(gameLoop, 100);
+            setTimeout(gameLoop, 100); // 每100毫秒执行一次游戏循环
         }
 
         function startGame() {
             gameRunning = true;
-            score = 0;
-            snake = [{ x: 200, y: 200 }];
+            score = 0; // 初始化分数
+            snake = [{ x: 200, y: 200 }]; // 初始化蛇的位置
             dx = snakeBlock;
-            dy = 0;
-            createFood();
-            gameLoop();
+            dy = 0; // 初始化蛇的移动方向
+            createFood(); // 生成食物
+            gameLoop(); // 开始游戏循环
         }
 
         function pauseGame() {
@@ -177,17 +188,20 @@
 
         function resumeGame() {
             gameRunning = true;
-            gameLoop();
+            gameLoop(); // 继续游戏循环
         }
 
+        // 添加触摸事件监听器
         document.addEventListener('touchstart', function(event) {
             const touchX = event.touches[0].clientX;
             const touchY = event.touches[0].clientY;
 
+            // 获取按钮的边界矩形
             const startButtonRect = document.getElementById('startButton').getBoundingClientRect();
             const pauseButtonRect = document.getElementById('pauseButton').getBoundingClientRect();
             const resumeButtonRect = document.getElementById('resumeButton').getBoundingClientRect();
 
+            // 根据触摸位置判断点击了哪个按钮
             if (touchX > startButtonRect.left && touchX < startButtonRect.right &&
                 touchY > startButtonRect.top && touchY < startButtonRect.bottom) {
                 startGame();
@@ -198,7 +212,7 @@
                        touchY > resumeButtonRect.top && touchY < resumeButtonRect.bottom) {
                 resumeGame();
             } else {
-                changeDirection(event);
+                changeDirection(event); // 如果点击了画布，则改变蛇的移动方向
             }
         });
 
@@ -206,6 +220,27 @@
         document.getElementById('startButton').addEventListener('click', startGame);
         document.getElementById('pauseButton').addEventListener('click', pauseGame);
         document.getElementById('resumeButton').addEventListener('click', resumeGame);
+
+        // 添加键盘事件监听器以兼容键盘控制
+        document.addEventListener('keydown', function(event) {
+            const keyPressed = event.keyCode;
+
+            // 根据按键改变蛇的移动方向
+            if (keyPressed === 37 && dx === 0) { // 左箭头
+                dx = -snakeBlock;
+                dy = 0;
+            } else if (keyPressed === 38 && dy === 0) { // 上箭头
+                dx = 0;
+                dy = -snakeBlock;
+            } else if (keyPressed === 39 && dx === 0) { // 右箭头
+                dx = snakeBlock;
+                dy = 0;
+            } else if (keyPressed === 40 && dy === 0) { // 下箭头
+                dx = 0;
+                dy = snakeBlock;
+            }
+        });
     </script>
 </body>
 </html>
+ 
