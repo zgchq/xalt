@@ -50,7 +50,7 @@
         }
          
         /* 创建两列 */
-        /* Left column */
+        /* 左侧列 */
         .leftcolumn {   
           float: left;
           width: 75%;
@@ -68,7 +68,17 @@
         .fakeimg {
           background-color: #aaa;
           width: 100%;
-          padding: 20px;
+          height: 100%; /* 添加高度以确保图片能够铺满整个 div */
+          padding: 0; /* 移除内边距以确保图片覆盖整个区域 */
+          position: relative; /* 添加相对定位以便更好地控制 */
+        }
+         
+        /* 调整 .fakeimg div 内的 img 元素 */
+        .fakeimg img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover; /* 覆盖整个区域并保持纵横比 */
+          display: block; /* 移除任何默认的外边距和内边距 */
         }
          
         /* 文章卡片效果 */
@@ -101,7 +111,7 @@
           }
         }
          
-        /* 响应式布局 -屏幕尺寸小于 400px 时，导航等布局改为上下布局 */
+        /* 响应式布局 - 屏幕尺寸小于 400px 时，导航等布局改为上下布局 */
         @media screen and (max-width: 400px) {
           .topnav a {
             float: none;
@@ -130,7 +140,7 @@
             <h2>文章标题</h2>
             <h5>2025 年 7 月 1日</h5>
             <div class="fakeimg" style="height:200px;">
-                <img src="ing/chenqi.jpg" alt="关于陈奇" style="width: 100%; height: auto;">
+                <img src="ing/chenqi.jpg" alt="关于陈奇">
             </div>
             <p>一些文本...</p>
             <p>前端的学习主要就是，超文本标记语言（html），网页样式（css）,网页交互（JavaScript）,通过这些学习，就可以在网络世界里大展手脚，编辑出形形色色绚丽多彩的靓丽网页画面，从而展示你的梦想！</p>
@@ -139,7 +149,7 @@
             <h2>文章标题</h2>
             <h5>2025 年 7 月 1日</h5>
             <div class="fakeimg" style="height:200px;">
-                <img src="ing/another_article.jpg" alt="另一篇文章" style="width: 100%; height: auto;">
+                <img src="ing/another_article.jpg" alt="另一篇文章">
             </div>
             <p>一些文本...</p>
             <p>那么后端学习，学的又是什么呢，主要就有 (C)(C++)（java）(php)(python)(Node.js)以及数据库的学习和应用，那么这么多的学习会让你难以学习和管理，所以你还要学习版本控制的最好的开源软件（git）！</p>
@@ -149,20 +159,20 @@
         <div class="card">
             <h2>关于我</h2>
             <div class="fakeimg" style="height:100px;">
-                <img src="ing/mm.PNG" alt="我的妈妈" style="width: 100%; height: auto;">
+                <img src="ing/mm.PNG" alt="我的妈妈">
             </div>
             <p>关于我的一些信息..</p>
         </div>
         <div class="card">
             <h3>热门文章</h3>
             <div class="fakeimg">
-                <img src="ing/top_article_1.jpg" alt="热门文章1" style="width: 100%; height: auto;">
+                <img src="ing/top_article_1.jpg" alt="热门文章1" style="height:100px;">
             </div>
             <div class="fakeimg">
-                <img src="ing/top_article_2.jpg" alt="热门文章2" style="width: 100%; height: auto;">
+                <img src="ing/top_article_2.jpg" alt="热门文章2" style="height:100px;">
             </div>
             <div class="fakeimg">
-                <img src="ing/top_article_3.jpg" alt="热门文章3" style="width: 100%; height: auto;">
+                <img src="ing/top_article_3.jpg" alt="热门文章3" style="height:100px;">
             </div>
         </div>
         <div class="card">
