@@ -130,8 +130,8 @@
 <div class="topnav">
     <a href="world.html">贪吃蛇小游戏</a>
     <a href="https://kdocs.cn/l/cnNaRr9Z5qXe">世界历史概述</a>
-    <a href="#">链接3</a>
-    <a href="#" style="float:right">链接4</a>
+    <a href="shipin.html">视频链接</a>
+    <a href="yinyue.html" style="float:right">音乐链接</a>
 </div>
 
 <div class="row">
@@ -172,7 +172,7 @@
                 <img src="ing/eee.jpg" alt="热门文章2" style="height:100px;">
             </div>
             <div class="fakeimg">
-                <img src="ing/hl.jpg" alt="热门文章3" style="height:100px;">
+                <img src="ing/wode.jpg" alt="热门文章3" style="height:100px;">
             </div>
         </div>
         <div class="card">
@@ -185,6 +185,19 @@
 <div class="footer">
     <h2>底部区域</h2>
 </div>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('Service Worker 注册成功，作用域为:', registration.scope);
+                })
+                .catch(error => {
+                    console.error('Service Worker 注册失败:', error);
+                });
+        });
+    }
+</script>
 
 </body>
 </html>

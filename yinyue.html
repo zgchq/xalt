@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音乐播放器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        audio {
+            max-width: 80%;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        input[type="range"] {
+            width: 300px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <audio id="myAudio" src="YinYue/大壮 - 遗憾.mp3" controls></audio>
+    <div class="controls">
+        <button id="playBtn">播放</button>
+        <button id="pauseBtn">暂停</button>
+        <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1">
+    </div>
+
+    <script>
+        const audio = document.getElementById('myAudio');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const volumeControl = document.getElementById('volumeControl');
+
+        // 播放按钮点击事件
+        playBtn.addEventListener('click', function() {
+            audio.play();
+        });
+
+        // 暂停按钮点击事件
+        pauseBtn.addEventListener('click', function() {
+            audio.pause();
+        });
+
+        // 音量控制滑块事件
+        volumeControl.addEventListener('input', function() {
+            audio.volume = volumeControl.value;
+        });
+
+        // 检查音频是否成功加载
+        audio.addEventListener('loadedmetadata', function() {
+            console.log('音频已成功加载');
+        });
+
+        // 检查音频加载失败时的错误
+        audio.addEventListener('error', function() {
+            console.error('音频加载失败:', audio.error);
+        });
+    </script>
+</body>
+</html>

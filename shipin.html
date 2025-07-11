@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频播放器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        video {
+            max-width: 80%;
+            max-height: 80%;
+        }
+    </style>
+</head>
+<body>
+    <video id="myVideo" controls>
+        <source src="ShiPin/b23e281f11119626c6e70312888eaf43.mp4" type="video/mp4">         
+        您的浏览器不支持 HTML5 视频标签。
+    </video>      
+    <script>
+        const video = document.getElementById('myVideo');
+
+        // 检查视频是否成功加载
+        video.addEventListener('loadedmetadata', function() {
+            console.log('视频已成功加载');
+        });
+
+        // 检查视频加载失败时的错误
+        video.addEventListener('error', function() {
+            console.error('视频加载失败:', video.error);
+        });
+    </script>
+</body>
+</html>
